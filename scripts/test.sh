@@ -1,0 +1,1 @@
+export IS_UNIT_TEST=1 && go test -v $(go list ./...)

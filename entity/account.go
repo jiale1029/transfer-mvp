@@ -12,7 +12,7 @@ const (
 )
 
 // Assuming transactions is in dollar and cents
-// Support precision up to 1/10000 (e.g. 0.56123)
+// Support precision up to 1/100000 (e.g. 0.56123)
 type Money string
 
 func (m Money) Dollar() int64 {

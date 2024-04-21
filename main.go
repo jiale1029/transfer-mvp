@@ -5,11 +5,15 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/jiale1029/transaction/api"
+	"github.com/jiale1029/transaction/dal"
+	"github.com/jiale1029/transaction/dal/mysql"
 )
 
-func main() {
-	r := gin.Default()
+const serverPort = ":8080"
 
+func main() {
+	api.AccountManager = dal.NewAccountDAO(mysql.InitMySQL())
+	r := gin.Default()
 	// accounts related endpoint
 	r.GET("/accounts/:id", api.HandleGetAccount)
 	r.POST("/accounts", api.HandleCreateAccount)
@@ -19,6 +23,5 @@ func main() {
 	r.GET("/transactions/:id", api.HandleGetTransaction)
 	r.POST("/transactions", api.HandleSubmitTransaction)
 	r.GET("/transactions/list", api.HandleListTransactions)
-
-	log.Fatal(r.Run())
+	log.Fatal(r.Run(serverPort))
 }

@@ -9,39 +9,39 @@ type CustomErr interface {
 }
 
 type BizError struct {
-	Code    int32
-	Message string
-	Err     error
+	code    int32
+	message string
+	err     error
 }
 
 func (b BizError) Error() string {
-	if b.Err != nil {
-		return fmt.Sprintf("%v:%v:%v", b.Code, b.Message, b.Err)
+	if b.err != nil {
+		return fmt.Sprintf("%v:%v:%v", b.code, b.message, b.err)
 	}
-	return fmt.Sprintf("%v:%v", b.Code, b.Message)
+	return fmt.Sprintf("%v:%v", b.code, b.message)
 }
 
 func (b BizError) WithMsg(msg string) error {
-	return &BizError{Code: b.Code, Message: fmt.Sprintf("%v:%v", b.Error(), msg)}
+	return &BizError{code: b.code, message: fmt.Sprintf("%v:%v", b.Error(), msg)}
 }
 
 func (b BizError) Wrap(err error) error {
-	return BizError{Code: b.Code, Message: b.Message, Err: err}
+	return BizError{code: b.code, message: b.message, err: err}
 }
 
 var (
-	ErrMySQL = BizError{Code: 1000, Message: "MySQL error"}
+	ErrMySQL = BizError{code: 1000, message: "MySQL error"}
 	// Request related
-	ErrInvalidRequest = BizError{Code: 10001, Message: "Invalid request"}
+	ErrInvalidRequest = BizError{code: 10001, message: "Invalid request"}
 
 	// Account related
-	ErrAccountNotFound     = BizError{Code: 30001, Message: "Account not found"}
-	ErrAccountAlreadyExist = BizError{Code: 30002, Message: "Account already exists"}
+	ErrAccountNotFound     = BizError{code: 30001, message: "Account not found"}
+	ErrAccountAlreadyExist = BizError{code: 30002, message: "Account already exists"}
 
 	// Transaction related
-	ErrTransactionFailed          = BizError{Code: 40000, Message: "Transaction failed"}
-	ErrInsufficientBalance        = BizError{Code: 40001, Message: "Insufficient balance to deduct"}
-	ErrSourceAccountNotExist      = BizError{Code: 40002, Message: "Source account does not exist"}
-	ErrDestinationAccountNotExist = BizError{Code: 40003, Message: "Destination account does not exist"}
-	ErrTransactionNotFound        = BizError{Code: 40004, Message: "Transaction does not exist"}
+	ErrTransactionFailed          = BizError{code: 40000, message: "Transaction failed"}
+	ErrInsufficientBalance        = BizError{code: 40001, message: "Insufficient balance to deduct"}
+	ErrSourceAccountNotExist      = BizError{code: 40002, message: "Source account does not exist"}
+	ErrDestinationAccountNotExist = BizError{code: 40003, message: "Destination account does not exist"}
+	ErrTransactionNotFound        = BizError{code: 40004, message: "Transaction does not exist"}
 )

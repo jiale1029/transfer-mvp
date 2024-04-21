@@ -67,6 +67,11 @@ func TestMoney_Cent(t *testing.T) {
 			m:    "99.12399999",
 			want: 12399,
 		},
+		{
+			name: "smallest precision",
+			m:    "0.00001",
+			want: 1,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

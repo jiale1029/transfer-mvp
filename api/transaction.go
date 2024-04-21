@@ -2,6 +2,7 @@ package api
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jiale1029/transaction/common"
@@ -21,12 +22,17 @@ func HandleSubmitTransaction(c *gin.Context) {
 		err           error
 	)
 
+	if strings.HasPrefix(req.Amount, "-") {
+		c.JSON(http.StatusBadRequest, NewErrResponse(common.ErrInvalidRequest))
+		return
+	}
+
 	amount := entity.Money(req.Amount)
 	if amount.Dollar() == 0 && amount.Cent() == 0 {
 		c.JSON(http.StatusBadRequest, NewErrResponse(common.ErrInvalidRequest))
 		return
 	}
-	if transactionId, err = accountManager.SubmitTransaction(c.Request.Context(), req.FromAccountId, req.ToAccountId, amount.Dollar(), amount.Cent()); err != nil {
+	if transactionId, err = AccountManager.SubmitTransaction(c.Request.Context(), req.FromAccountId, req.ToAccountId, amount.Dollar(), amount.Cent()); err != nil {
 		c.JSON(http.StatusBadRequest, NewErrResponse(err))
 		return
 	}
@@ -42,7 +48,7 @@ func HandleGetTransaction(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, NewErrResponse(common.ErrInvalidRequest.WithMsg("missing id")))
 		return
 	}
-	tx, err := accountManager.GetTransaction(c.Request.Context(), txId)
+	tx, err := AccountManager.GetTransaction(c.Request.Context(), txId)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, NewErrResponse(err))
 		return
@@ -60,7 +66,7 @@ func HandleGetTransaction(c *gin.Context) {
 
 // HandleListTransactions retrieves all transactions available
 func HandleListTransactions(c *gin.Context) {
-	transactions, err := accountManager.GetAllTransactions(c.Request.Context())
+	transactions, err := AccountManager.GetAllTransactions(c.Request.Context())
 	if err != nil {
 		c.JSON(http.StatusBadRequest, NewErrResponse(err))
 		return

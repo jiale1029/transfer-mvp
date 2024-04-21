@@ -28,7 +28,7 @@ func (m *AccountDAO) CreateAccount(ctx context.Context, accountId string, balanc
 		BalanceCent:   balanceCent,
 	}).Error
 	if err != nil {
-		if strings.Contains(err.Error(), "Error 1062") {
+		if strings.Contains(err.Error(), "Error 1062") || strings.Contains(err.Error(), "UNIQUE constraint failed") {
 			return common.ErrAccountAlreadyExist
 		}
 		return common.ErrMySQL.Wrap(err)

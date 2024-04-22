@@ -1,8 +1,6 @@
 package main
 
 import (
-	"log"
-
 	"github.com/gin-gonic/gin"
 	"github.com/jiale1029/transaction/api"
 	"github.com/jiale1029/transaction/dal"
@@ -23,5 +21,5 @@ func main() {
 	r.GET("/transactions/:id", api.HandleGetTransaction)
 	r.POST("/transactions", api.HandleSubmitTransaction)
 	r.GET("/transactions/list", api.HandleListTransactions)
-	log.Fatal(r.Run(serverPort))
+	r.Run(serverPort)
 }

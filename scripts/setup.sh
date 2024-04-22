@@ -12,8 +12,8 @@ fi
 if ! command -v mysql &> /dev/null
 then
     echo "mysql command could not be found"
-    echo "if you're on mac, use `brew install mysql` "
-    echo "if you're on ubuntu, use `sudo apt install mysql-server`"
+    echo "if you're on mac, use brew install mysql "
+    echo "if you're on ubuntu, use sudo apt install mysql-server"
     exit 1
 else
     mysql --version

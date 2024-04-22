@@ -12,16 +12,16 @@ import (
 	"gorm.io/gorm/clause"
 )
 
-type AccountDAO struct {
+type AccountDAOImpl struct {
 	cli *gorm.DB
 }
 
-func NewAccountDAO(db *gorm.DB) *AccountDAO {
-	return &AccountDAO{cli: db}
+func NewAccountDAO(db *gorm.DB) AccountDAO {
+	return &AccountDAOImpl{cli: db}
 }
 
 // CreateAccount creates an account if the account does not exist
-func (m *AccountDAO) CreateAccount(ctx context.Context, accountId string, balanceDollar, balanceCent int64) error {
+func (m *AccountDAOImpl) CreateAccount(ctx context.Context, accountId string, balanceDollar, balanceCent int64) error {
 	err := m.cli.Create(&entity.Account{
 		AccountId:     accountId,
 		BalanceDollar: balanceDollar,
@@ -36,7 +36,7 @@ func (m *AccountDAO) CreateAccount(ctx context.Context, accountId string, balanc
 	return nil
 }
 
-func (m *AccountDAO) GetAccount(ctx context.Context, accountId string) (*entity.Account, error) {
+func (m *AccountDAOImpl) GetAccount(ctx context.Context, accountId string) (*entity.Account, error) {
 	res := entity.Account{}
 	err := m.cli.Where("account_id = ?", accountId).First(&res).Error
 	if err != nil {
@@ -48,7 +48,7 @@ func (m *AccountDAO) GetAccount(ctx context.Context, accountId string) (*entity.
 	return &res, nil
 }
 
-func (m *AccountDAO) GetAllAccounts(ctx context.Context) ([]*entity.Account, error) {
+func (m *AccountDAOImpl) GetAllAccounts(ctx context.Context) ([]*entity.Account, error) {
 	var results []*entity.Account
 	if err := m.cli.Where("1=1").Find(&results).Error; err != nil {
 		return nil, common.ErrMySQL.Wrap(err)
@@ -56,7 +56,7 @@ func (m *AccountDAO) GetAllAccounts(ctx context.Context) ([]*entity.Account, err
 	return results, nil
 }
 
-func (m *AccountDAO) SubmitTransaction(ctx context.Context, from, to string, amountDollar, amountCent int64) (string, error) {
+func (m *AccountDAOImpl) SubmitTransaction(ctx context.Context, from, to string, amountDollar, amountCent int64) (string, error) {
 	transactionId := uuid.NewString()
 	transaction := &entity.Transaction{
 		TransactionId: transactionId,
@@ -169,7 +169,7 @@ func (m *AccountDAO) SubmitTransaction(ctx context.Context, from, to string, amo
 	return transactionId, nil
 }
 
-func (m *AccountDAO) GetTransaction(ctx context.Context, transactionId string) (*entity.Transaction, error) {
+func (m *AccountDAOImpl) GetTransaction(ctx context.Context, transactionId string) (*entity.Transaction, error) {
 	var transaction entity.Transaction
 	if err := m.cli.Where("transaction_id = ?", transactionId).First(&transaction).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -180,7 +180,7 @@ func (m *AccountDAO) GetTransaction(ctx context.Context, transactionId string) (
 	return &transaction, nil
 }
 
-func (m *AccountDAO) GetAllTransactions(ctx context.Context) ([]*entity.Transaction, error) {
+func (m *AccountDAOImpl) GetAllTransactions(ctx context.Context) ([]*entity.Transaction, error) {
 	var transactions []*entity.Transaction
 	if err := m.cli.Where("1=1").Find(&transactions).Error; err != nil {
 		return nil, common.ErrMySQL.Wrap(err)

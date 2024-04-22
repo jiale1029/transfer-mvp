@@ -10,10 +10,6 @@ import (
 	"gorm.io/gorm"
 )
 
-var (
-	Database *gorm.DB
-)
-
 const (
 	user     = "root"
 	password = ""
@@ -55,6 +51,5 @@ func InitMySQL() *gorm.DB {
 	if err != nil {
 		panic(err)
 	}
-	Database = db
 	return db
 }

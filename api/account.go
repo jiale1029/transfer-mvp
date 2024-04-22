@@ -10,7 +10,7 @@ import (
 	"github.com/jiale1029/transaction/entity"
 )
 
-var AccountManager *dal.AccountDAO
+var AccountManager dal.AccountDAO
 
 // HandleCreateAccount creates an account if not exist
 func HandleCreateAccount(c *gin.Context) {

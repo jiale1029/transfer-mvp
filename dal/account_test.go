@@ -10,7 +10,7 @@ import (
 )
 
 func TestAccountDAO_CreateGetAccount(t *testing.T) {
-	m := &AccountDAO{cli: mysql.InitMySQL()}
+	m := &AccountDAOImpl{cli: mysql.InitMySQL()}
 
 	// create a new account
 	err := m.CreateAccount(context.Background(), "123", 123, 500)
@@ -28,7 +28,7 @@ func TestAccountDAO_CreateGetAccount(t *testing.T) {
 }
 
 func TestAccountDAO_SubmitTransaction(t *testing.T) {
-	m := &AccountDAO{cli: mysql.InitMySQL()}
+	m := &AccountDAOImpl{cli: mysql.InitMySQL()}
 
 	// create a new account
 	_ = m.CreateAccount(context.Background(), "123", 123, 500)

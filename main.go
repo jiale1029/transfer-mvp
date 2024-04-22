@@ -10,7 +10,7 @@ import (
 const serverPort = ":8080"
 
 func main() {
-	api.AccountManager = dal.NewAccountDAO(mysql.InitMySQL())
+	initDAL()
 	r := gin.Default()
 	// accounts related endpoint
 	r.GET("/accounts/:id", api.HandleGetAccount)
@@ -22,4 +22,8 @@ func main() {
 	r.POST("/transactions", api.HandleSubmitTransaction)
 	r.GET("/transactions/list", api.HandleListTransactions)
 	r.Run(serverPort)
+}
+
+func initDAL() {
+	api.AccountManager = dal.NewAccountDAO(mysql.InitMySQL())
 }
